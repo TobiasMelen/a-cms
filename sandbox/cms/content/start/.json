@@ -1,0 +1,10 @@
+{
+  "id": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "name": "Home",
+  "slug": "",
+  "parentId": null,
+  "props": {
+    "title": "Home 2"
+  },
+  "sortKey": "n"
+}

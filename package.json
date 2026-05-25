@@ -1,0 +1,8 @@
+{
+  "name": "a-cms-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "sandbox"
+  ]
+}

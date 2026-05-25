@@ -1,0 +1,10 @@
+{
+  "id": "da89b882-a574-44f5-9abe-25f14034aedf",
+  "name": "Blog",
+  "slug": "blog",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "Blog"
+  },
+  "sortKey": "nn"
+}

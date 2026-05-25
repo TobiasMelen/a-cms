@@ -1,0 +1,11 @@
+{
+  "id": "b7557b8a-7f10-4aff-9d70-988154b85a1f",
+  "name": "Our Team",
+  "slug": "team",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "Our Team asasdsas",
+    "body": "Some optional body"
+  },
+  "sortKey": "n"
+}

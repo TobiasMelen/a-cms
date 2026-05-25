@@ -1,0 +1,60 @@
+---
+import { schemas } from "virtual:a-cms/templates";
+import { Page } from "../data/repository";
+import z from "zod";
+import { API_PREFIX } from "../constants";
+
+interface Props {
+  page: Page<any>
+}
+
+const { page } = Astro.props
+
+const schema = schemas[page.templateId];
+
+const fields = schema
+  ? Object.entries(schema.shape).map(([key, field]) => ({
+      key,
+      value: (page.props[key] as string) ?? "",
+      type: field instanceof z.ZodOptional ? "optional" : "required",
+    }))
+  : [];
+---
+<div style="position:fixed;bottom:0;left:0;right:0;background:#222;color:#fff;padding:1em;z-index:9999;max-height:40vh;overflow:auto;">
+  <h3 style="margin:0 0 0.5em">Edit: {page.name}</h3>
+  <form id="edit-form">
+    {fields.map(({ key, value, type }) => (
+      <label style="display:block;margin-bottom:0.5em;">
+        <span>{key} {type === "optional" ? "(optional)" : ""}</span>
+        <input
+          name={key}
+          value={value}
+          style="display:block;width:100%;padding:0.3em;box-sizing:border-box;"
+        />
+      </label>
+    ))}
+    <button type="submit" style="margin-top:0.5em;padding:0.3em 1em;">Save</button>
+  </form>
+  <script is:inline define:vars={{ pageId: page.id, templateId: page.templateId, apiPrefix: API_PREFIX }}>
+    document.getElementById("edit-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const props = Object.fromEntries(form.entries());
+      const res = await fetch(`${apiPrefix}/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: pageId, templateId, props }),
+      });
+      if (res.ok) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("t", Date.now().toString());
+        const { navigate } = await import("astro:transitions/client");
+        navigate('/')
+        navigate(url.href);
+      } else {
+        const err = await res.json();
+        alert("Save failed: " + JSON.stringify(err.error));
+      }
+    });
+  </script>
+</div>

@@ -1,0 +1,11 @@
+{
+  "id": "a4047793-0af8-4100-9d25-97285eb92c48",
+  "name": "Astro Tips",
+  "slug": "astro-tips",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "Astro Tips",
+    "body": "Some useful tips for working with Astro."
+  },
+  "sortKey": "nn"
+}

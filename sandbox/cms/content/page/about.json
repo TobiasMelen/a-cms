@@ -1,0 +1,10 @@
+{
+  "id": "fd3eb1e3-7899-4c07-9c6e-2c8855fc225b",
+  "name": "About Us",
+  "slug": "about",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "About Us"
+  },
+  "sortKey": "n"
+}

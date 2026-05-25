@@ -1,0 +1,25 @@
+---
+import { z } from "zod";
+import { resolve, route, type Page } from "a-cms";
+
+export const pageProps = z.object({
+  title: z.string(),
+});
+
+const { page } = Astro.props as { page: Page };
+---
+
+<html>
+  <head><title>{page.props.title}</title></head>
+  <body>
+    <h2 style="color:red">{page.props.title}</h2>
+    <pre>{JSON.stringify(page, null, 2)}</pre>
+    {
+      page.children.map((child) => (
+        <a style="display:block" href={route(child)}>
+          {resolve(child).props.title}
+        </a>
+      ))
+    }<div></div>
+  </body>
+</html>

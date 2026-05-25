@@ -1,0 +1,19 @@
+---
+import type { Page } from "a-cms";
+import { z } from "zod";
+
+export const pageProps = z.object({
+  title: z.string(),
+  body: z.string().optional(),
+});
+
+const page = Astro.props.page as Page<z.infer<typeof pageProps>>;
+---
+
+<html>
+  <head><title>{page.props.title}</title></head>
+  <body>
+    <h2 style="color:red">{page.props.title}</h2>
+    <pre>{JSON.stringify(page, null, 2)}</pre>
+  </body>
+</html>

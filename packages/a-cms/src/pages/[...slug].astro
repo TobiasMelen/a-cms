@@ -1,0 +1,18 @@
+---
+import { routes } from "virtual:a-cms/routes";
+import { templates } from "virtual:a-cms/templates";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return routes.map(({ slug, page }) => ({
+    params: { slug: slug || undefined },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const Template = templates[page.templateId];
+---
+
+<Template {page} />
