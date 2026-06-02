@@ -1,13 +1,3 @@
-import { randomBytes } from "node:crypto";
-
-export function uuid(): string {
-  const b = randomBytes(16);
-  b[6] = (b[6] & 0x0f) | 0x40;
-  b[8] = (b[8] & 0x3f) | 0x80;
-  const h = b.toString("hex");
-  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
-}
-
 const BASE = "abcdefghijklmnopqrstuvwxyz";
 const MID = 13; // index of 'n', middle of alphabet
 
@@ -44,4 +34,32 @@ export function sortKeyBetween(a: string | null, b: string | null): string {
 
   // Adjacent characters: go deeper after the first
   return BASE[ca] + sortKeyBetween(a.slice(1) || null, null);
+}
+
+type SortableItem = {
+  sortKey: string;
+};
+
+export function sortKeyForPosition<T extends SortableItem>(
+  siblings: T[],
+  position: { beforeId?: string; afterId?: string },
+  getId: (item: T) => string
+): string {
+  if (position.beforeId) {
+    const before = siblings.find((item) => getId(item) === position.beforeId);
+    const idx = before ? siblings.indexOf(before) : -1;
+    const prev = idx > 0 ? siblings[idx - 1] : null;
+    return sortKeyBetween(prev?.sortKey ?? null, before?.sortKey ?? null);
+  }
+
+  if (position.afterId) {
+    const after = siblings.find((item) => getId(item) === position.afterId);
+    const idx = after ? siblings.indexOf(after) : -1;
+    const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+    return sortKeyBetween(after?.sortKey ?? null, next?.sortKey ?? null);
+  }
+
+  // No position specified — append to end
+  const last = siblings.length > 0 ? siblings[siblings.length - 1] : null;
+  return sortKeyBetween(last?.sortKey ?? null, null);
 }

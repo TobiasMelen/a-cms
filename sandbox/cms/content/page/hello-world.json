@@ -1,5 +1,4 @@
 {
-  "id": "3ac2c007-c64f-48fb-a8fb-b209e6369d44",
   "name": "Hello World",
   "slug": "hello-world",
   "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
@@ -7,5 +6,11 @@
     "title": "asasdasd",
     "body": "This is our first blog post."
   },
-  "sortKey": "n"
+  "sortKey": "r",
+  "contentId": "3ac2c007-c64f-48fb-a8fb-b209e6369d44",
+  "versionId": "3ac2c007-c64f-48fb-a8fb-b209e6369d45",
+  "created": "2026-05-26T09:10:35.731Z",
+  "updated": "2026-06-02T11:59:24.379Z",
+  "published": true,
+  "publishedDate": "2026-06-02T14:38:40.594Z"
 }

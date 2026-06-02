@@ -1,0 +1,17 @@
+{
+  "versionId": "d5ff5383-2fca-44a0-bde7-28726a2fd445",
+  "contentId": "b7557b8a-7f10-4aff-9d70-988154b85a1f",
+  "name": "Our Team",
+  "slug": "team",
+  "sortKey": "j",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "asdassd",
+    "body": "asdssaddsfassa",
+    "subtitle": "sdas"
+  },
+  "published": true,
+  "created": "2026-06-02T14:38:15.576Z",
+  "updated": "2026-06-02T14:38:34.405Z",
+  "publishedDate": "2026-06-02T14:38:59.020Z"
+}

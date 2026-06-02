@@ -1,11 +1,16 @@
 {
-  "id": "b7557b8a-7f10-4aff-9d70-988154b85a1f",
   "name": "Our Team",
   "slug": "team",
   "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
   "props": {
-    "title": "Our Team asasdsas",
-    "body": "Some optional body"
+    "title": "asdasd",
+    "body": "asdssaddsfassa"
   },
-  "sortKey": "n"
+  "sortKey": "j",
+  "contentId": "b7557b8a-7f10-4aff-9d70-988154b85a1f",
+  "versionId": "b7557b8a-7f10-4aff-9d70-988154b85a11",
+  "created": "2026-05-26T09:10:35.731Z",
+  "updated": "2026-06-02T10:24:13.140Z",
+  "published": false,
+  "publishedDate": "2026-06-02T14:32:12.583Z"
 }

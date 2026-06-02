@@ -1,0 +1,120 @@
+---
+import { templates } from "virtual:a-cms/templates";
+import repository from "../data/repository";
+import type { Page } from "../data/types";
+import { buildUrlMap, getAncestry } from "../routing";
+import { EDIT_PREFIX } from "../constants";
+import EditUI from "./components/EditUI/EditUI.astro";
+
+export const prerender = false;
+
+const slug = Astro.params.slug ?? "";
+const versionId = Astro.url.searchParams.get("version");
+
+const allRaw = await repository.getAll(process.cwd(), true);
+
+// Deduplicate by contentId: published > previously published > latest draft
+function versionPriority(p: Page): number {
+  if (p.published) return 2;
+  if (p.publishedDate) return 1;
+  return 0;
+}
+const bestByContentId = new Map<string, Page>();
+for (const p of allRaw) {
+  const existing = bestByContentId.get(p.contentId);
+  if (!existing || versionPriority(p) > versionPriority(existing) ||
+      (versionPriority(p) === versionPriority(existing) && p.updated > existing.updated)) {
+    bestByContentId.set(p.contentId, p);
+  }
+}
+let allPages = [...bestByContentId.values()];
+
+// Rebuild children from deduplicated list
+for (const p of allPages) p.children = [];
+for (const p of allPages) {
+  if (p.parent) {
+    const parent = allPages.find((pp) => pp.contentId === p.parent);
+    if (parent) parent.children.push(p.contentId);
+  }
+}
+
+const urlMap = buildUrlMap(allPages);
+
+let page: Page | null;
+let published: Page | null;
+
+if (versionId) {
+  page = await repository.getByVersionId(process.cwd(), versionId);
+  if (!page) return Astro.rewrite("/404");
+  published = await repository.getPublishedVersion(
+    process.cwd(),
+    page.contentId,
+  );
+} else {
+  published = urlMap.get(slug) ?? null;
+  if (!published) return Astro.rewrite("/404");
+  const draft = await repository.getLatestDraft(
+    process.cwd(),
+    published.contentId,
+  );
+  page = draft ?? published;
+}
+
+const versions = await repository.getAllVersions(process.cwd(), page.contentId);
+const Template = templates[page.templateId];
+
+const byContentId = new Map(allPages.map((p) => [p.contentId, p]));
+
+// Compute per-contentId status from raw data
+const italicByContentId: Record<string, boolean> = {};
+const dotByContentId: Record<string, string | undefined> = {};
+for (const [cid] of byContentId) {
+  const versions = allRaw.filter((p) => p.contentId === cid);
+  // Italic: no currently published version
+  italicByContentId[cid] = !versions.some((v) => v.published);
+  // Green dot: latest version (by publishedDate ?? updated) is a draft
+  const sorted = [...versions].sort((a, b) => {
+    const aDate = a.publishedDate ?? a.updated;
+    const bDate = b.publishedDate ?? b.updated;
+    return new Date(bDate).getTime() - new Date(aDate).getTime();
+  });
+  if (sorted[0] && !sorted[0].published && !sorted[0].publishedDate) {
+    dotByContentId[cid] = "#22c55e";
+  }
+}
+
+// Latest name per contentId (from most recently updated version)
+const sortedByUpdated = [...allRaw].sort((a, b) => b.updated.localeCompare(a.updated));
+const latestName: Record<string, string> = {};
+for (const p of sortedByUpdated) {
+  if (!latestName[p.contentId]) latestName[p.contentId] = p.name;
+}
+
+const treeItems: Record<
+  string,
+  { index: string; children: string[]; data: string; italic?: boolean; dotColor?: string }
+> = {};
+const treeUrls: Record<string, string> = {};
+for (const p of allPages) {
+  treeItems[p.contentId] = {
+    index: p.contentId,
+    children: p.children,
+    data: latestName[p.contentId] ?? p.name,
+    italic: italicByContentId[p.contentId],
+    dotColor: dotByContentId[p.contentId],
+  };
+  const segments = getAncestry(p, byContentId)
+    .map((page) => page.slug)
+    .filter(Boolean);
+  treeUrls[p.contentId] = EDIT_PREFIX + "/" + segments.join("/");
+}
+---
+
+<div transition:name={`template-${page.contentId}`} transition:animate="fade">
+  <Template {page} />
+</div>
+{(() => {
+  const pageSegments = getAncestry(page, byContentId).map((p) => p.slug).filter(Boolean);
+  const pagePathPrefix = pageSegments.slice(0, -1).join("/");
+  return <EditUI {page} {versions} items={treeItems} urls={treeUrls} selectedVersionId={versionId} pagePathPrefix={pagePathPrefix} />;
+})()}

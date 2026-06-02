@@ -1,0 +1,60 @@
+---
+import { EDIT_PREFIX } from "../constants";
+import { camelCaseToTitle } from "../utils/format";
+import type { Content } from "../data/types";
+import styles from "./Field.module.css";
+
+interface Props<TContent extends Content> {
+  content: TContent;
+  field: keyof TContent["props"];
+}
+
+const { content, field } = Astro.props as Props<Content>;
+const value = String(content.props[field] ?? "");
+const isEdit = Astro.url.pathname.startsWith(EDIT_PREFIX);
+const label = camelCaseToTitle(String(field));
+---
+
+{isEdit ? <span contenteditable="true" data-field={String(field)} data-label={label} class={styles.field}>{value}</span> : value}
+
+{isEdit && (
+  <script>
+    if (!document.__aCmsFieldInit) {
+      document.__aCmsFieldInit = true;
+      document.addEventListener("input", (e) => {
+        const field = e.target.getAttribute?.("data-field");
+        if (!field) return;
+        document.dispatchEvent(
+          new CustomEvent("a-cms:field-edit", {
+            detail: { field, value: e.target.textContent ?? "" },
+          }),
+        );
+      });
+      document.addEventListener("focusin", (e) => {
+        const field = e.target.getAttribute?.("data-field");
+        if (!field) return;
+        document.dispatchEvent(
+          new CustomEvent("a-cms:field-focus", { detail: { field } }),
+        );
+      });
+      document.addEventListener("focusout", (e) => {
+        const field = e.target.getAttribute?.("data-field");
+        if (!field) return;
+        document.dispatchEvent(
+          new CustomEvent("a-cms:field-blur", { detail: { field } }),
+        );
+      });
+      // Listen for FieldForm focus events to highlight the twin field
+      document.addEventListener("a-cms:field-focus", (e) => {
+        document.querySelectorAll(`[data-field="${e.detail.field}"]`).forEach((el) => {
+          el.dataset.targeted = "true";
+        });
+      });
+      document.addEventListener("a-cms:field-blur", (e) => {
+        document.querySelectorAll(`[data-field="${e.detail.field}"]`).forEach((el) => {
+          delete el.dataset.targeted;
+        });
+      });
+    }
+  </script>
+)}

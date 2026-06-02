@@ -14,5 +14,8 @@
   "dependencies": {
     "a-cms": "*",
     "astro": "^6.3.7"
+  },
+  "devDependencies": {
+    "vite-plugin-oxlint": "^2.1.1"
   }
 }

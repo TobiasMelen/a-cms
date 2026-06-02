@@ -1,0 +1,21 @@
+:where(.a-cms-edit) {
+  --color-primary: #197bde;
+  --color-success: #22c55e;
+  --color-background: rgb(19, 21, 26);
+  --color-background-secondary: rgb(52, 56, 65);
+  --color-text: #fff;
+  --color-text-secondary: #bfc1c9;
+  --color-border: #5c5f66;
+  --color-border-focus: var(--color-primary);
+  --color-shadow:
+    rgba(19, 21, 26, 0.3) 0px 0px 0px 0px,
+    rgba(19, 21, 26, 0.29) 0px 1px 2px 0px,
+    rgba(19, 21, 26, 0.26) 0px 4px 4px 0px,
+    rgba(19, 21, 26, 0.15) 0px 10px 6px 0px,
+    rgba(19, 21, 26, 0.04) 0px 17px 7px 0px,
+    rgba(19, 21, 26, 0.01) 0px 26px 7px 0px;
+  --font-family:
+    ui-sans-serif, system-ui, -apple-system, "system-ui", "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}

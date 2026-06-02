@@ -1,12 +1,10 @@
 import type { AstroIntegration } from "astro";
 import react from "@astrojs/react";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { getAll } from "./data/flat-file";
-import { refreshCache } from "./cache";
-import { buildUrlMap } from "./routing";
 import { CMS_DIR, TEMPLATES_DIR, EDIT_PREFIX, API_PREFIX } from "./constants";
 
-export type { Page, PageReference } from "./data/repository";
+export type { Page, Content, PageReference } from "./data/types";
 export { resolve, route } from "./resolve";
 
 type Options = {
@@ -26,25 +24,16 @@ export default function aCms(
           config,
           injectRoute,
           updateConfig,
-          addWatchFile,
           addMiddleware,
           logger,
+          isRestart,
         }) => {
-          const root = options.root ?? config.root.pathname;
+          const root = config.root.pathname;
 
-          const pages = await getAll(root);
-          const urlMap = buildUrlMap(pages);
           const templatesDir = join(root, CMS_DIR, TEMPLATES_DIR);
-          const templateIds = [...new Set(pages.map((p) => p.templateId))];
-
-          await refreshCache(root);
-
-          const routeData = Array.from(urlMap.entries()).map(
-            ([slug, page]) => ({
-              slug,
-              page,
-            }),
-          );
+          const templateIds = (await readdir(templatesDir))
+            .filter((f) => f.endsWith(".astro"))
+            .map((f) => f.replace(/\.astro$/, ""));
 
           const templateImports = templateIds
             .map(
@@ -59,61 +48,52 @@ export default function aCms(
             .map((id, i) => `"${id}": S${i}`)
             .join(", ");
 
-          updateConfig({
-            vite: {
-              plugins: [
-                {
-                  name: "a-cms-virtual",
-                  resolveId(id) {
-                    if (id === "virtual:a-cms/routes")
-                      return "\0virtual:a-cms/routes";
-                    if (id === "virtual:a-cms/templates")
-                      return "\0virtual:a-cms/templates";
-                  },
-                  load(id) {
-                    if (id === "\0virtual:a-cms/routes") {
-                      return `export const routes = ${JSON.stringify(routeData)};`;
-                    }
-                    if (id === "\0virtual:a-cms/templates") {
-                      return `${templateImports}\nexport const templates = { ${templateMap} };\nexport const schemas = { ${schemaMap} };`;
-                    }
+          if (!isRestart) {
+            updateConfig({
+              vite: {
+                resolve: {
+                  alias: {
+                    "a-cms:repository": new URL("./data/flat-file.ts", import.meta.url).pathname,
                   },
                 },
-              ],
-            },
-          });
-
-          injectRoute({
-            pattern: "/[...slug]",
-            entrypoint: join(import.meta.dirname, "pages", "[...slug].astro"),
-          });
-
-          if (options.enableEditUI) {
-            addWatchFile(join(root, CMS_DIR, "content"));
-            addMiddleware({
-              entrypoint: join(import.meta.dirname, "middleware.ts"),
-              order: "pre",
+                plugins: [
+                  {
+                    name: "a-cms-virtual",
+                    resolveId(id) {
+                      if (id === "virtual:a-cms/templates")
+                        return "\0virtual:a-cms/templates";
+                    },
+                    load(id) {
+                      if (id === "\0virtual:a-cms/templates") {
+                        return `${templateImports}\nexport const templates = { ${templateMap} };\nexport const schemas = { ${schemaMap} };`;
+                      }
+                    },
+                  },
+                ],
+              },
             });
 
             injectRoute({
-              pattern: `${EDIT_PREFIX}/[...slug]`,
-              entrypoint: join(
-                import.meta.dirname,
-                "pages",
-                "edit",
-                "[...slug].astro",
-              ),
+              pattern: "/[...slug]",
+              entrypoint: new URL("./render/static.astro", import.meta.url),
             });
 
-            injectRoute({
-              pattern: `${API_PREFIX}/move`,
-              entrypoint: join(import.meta.dirname, "pages", "api", "move.ts"),
-            });
+            if (options.enableEditUI) {
+              addMiddleware({
+                entrypoint: new URL("./middleware.ts", import.meta.url),
+                order: "pre",
+              });
 
-            injectRoute({
-              pattern: `${API_PREFIX}/save`,
-              entrypoint: join(import.meta.dirname, "pages", "api", "save.ts"),
-            });
+              injectRoute({
+                pattern: `${EDIT_PREFIX}/[...slug]`,
+                entrypoint: new URL("./render/edit.astro", import.meta.url),
+              });
+
+              injectRoute({
+                pattern: `${API_PREFIX}/[...path]`,
+                entrypoint: new URL("./api/handler.ts", import.meta.url),
+              });
+            }
           }
 
           logger.info(`a-cms loaded (templates: ${templateIds.join(", ")})`);

@@ -1,0 +1,17 @@
+{
+  "versionId": "65a8406b-978f-44e5-8dba-c262f6f6bb53",
+  "contentId": "b7557b8a-7f10-4aff-9d70-988154b85a1f",
+  "name": "Our Team",
+  "slug": "team",
+  "sortKey": "j",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "asdasd",
+    "body": "asdssaddsfassa",
+    "subtitle": ""
+  },
+  "published": false,
+  "created": "2026-06-02T14:38:15.517Z",
+  "updated": "2026-06-02T14:38:15.517Z",
+  "publishedDate": null
+}

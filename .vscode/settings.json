@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxlint",
+  "oxc.enable": true,
+  "oxc.formatter.enable": true,
+  "oxc.codeActionOnSave": "fix",
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  }
+}

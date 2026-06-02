@@ -1,0 +1,19 @@
+.button {
+  background: linear-gradient(var(--color-primary), color-mix(var(--color-primary), black 20%));
+  font-weight: 500 !important;
+  letter-spacing: 0.02em;
+  min-width: 5cqw;
+  padding: 0.4em 0.75em;
+  border-radius: 10000px;
+  border: 1px solid #FFFFFF22
+}
+
+.button:disabled {
+  background: linear-gradient(#666, #555);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.success {
+  background: linear-gradient(var(--color-success), color-mix(var(--color-success), black 20%));
+}

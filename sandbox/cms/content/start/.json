@@ -1,10 +1,15 @@
 {
-  "id": "6b360723-5e42-4ab3-9cee-f9ba24365536",
   "name": "Home",
   "slug": "",
   "parentId": null,
   "props": {
-    "title": "Home 2"
+    "title": "Welcome"
   },
-  "sortKey": "n"
+  "sortKey": "a",
+  "contentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "versionId": "cb07084f-a667-47e9-8f12-9d221c7ed376",
+  "created": "2026-05-26T09:10:35.732Z",
+  "updated": "2026-06-01T06:40:51.299Z",
+  "published": true,
+  "publishedDate": "2026-06-02T14:39:04.056Z"
 }

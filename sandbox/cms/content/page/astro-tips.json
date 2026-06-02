@@ -1,11 +1,16 @@
 {
-  "id": "a4047793-0af8-4100-9d25-97285eb92c48",
   "name": "Astro Tips",
   "slug": "astro-tips",
-  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "parentId": "da89b882-a574-44f5-9abe-25f14034aedf",
   "props": {
-    "title": "Astro Tips",
-    "body": "Some useful tips for working with Astro."
+    "title": "adas",
+    "body": "asdasdasd"
   },
-  "sortKey": "nn"
+  "sortKey": "n",
+  "versionId": "a4047793-0af8-4100-9d25-97285eb92c47",
+  "contentId": "a4047793-0af8-4100-9d25-97285eb92c47",
+  "created": "2026-05-26T09:10:35.729Z",
+  "updated": "2026-06-02T09:19:41.759Z",
+  "published": true,
+  "publishedDate": "2026-06-02T09:56:22.287Z"
 }

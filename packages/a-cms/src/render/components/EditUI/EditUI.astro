@@ -1,0 +1,55 @@
+---
+import { ClientRouter } from "astro:transitions";
+import type { Page } from "../../../data/types";
+import { schemas } from "virtual:a-cms/templates";
+import PageTree from "../PageTree/PageTree";
+import FieldForm from "../FieldForm/FieldForm";
+import "../styles/normalize.css";
+import "../styles/base.css";
+
+interface Props {
+  page: Page;
+  versions: Page[];
+  items: Record<string, { index: string; children: string[]; data: string }>;
+  urls: Record<string, string>;
+  selectedVersionId?: string | null;
+  pagePathPrefix?: string;
+}
+const { page, versions, items, urls, selectedVersionId, pagePathPrefix } = Astro.props;
+
+import z from "zod";
+
+const schema = schemas[page.templateId];
+const propKeys = schema
+  ? Object.keys(schema.shape).map((key) => ({
+      key,
+      optional: schema.shape[key] instanceof z.ZodOptional,
+    }))
+  : [];
+---
+
+<PageTree
+  items={items}
+  urls={urls}
+  currentPageId={page.contentId}
+  client:load
+  transition:persist
+/>
+
+<FieldForm
+  pageName={page.name}
+  pageSlug={page.slug}
+  pageId={page.contentId}
+  versionId={page.versionId}
+  currentVersionId={selectedVersionId ?? versions[0]?.versionId ?? page.versionId}
+  templateId={page.templateId}
+  props={page.props as Record<string, string>}
+  propKeys={propKeys}
+  pagePathPrefix={pagePathPrefix ?? ""}
+  versions={versions}
+  className="a-cms-edit"
+  client:load
+  transition:persist
+/>
+
+<ClientRouter />

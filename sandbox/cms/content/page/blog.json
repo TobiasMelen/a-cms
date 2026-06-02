@@ -1,10 +1,16 @@
 {
-  "id": "da89b882-a574-44f5-9abe-25f14034aedf",
   "name": "Blog",
   "slug": "blog",
   "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
   "props": {
-    "title": "Blog"
+    "title": "Blog",
+    "body": "My blog"
   },
-  "sortKey": "nn"
+  "sortKey": "h",
+  "contentId": "da89b882-a574-44f5-9abe-25f14034aedf",
+  "versionId": "da89b882-a574-44f5-9abe-25f14034aed1",
+  "created": "2026-05-26T09:10:35.730Z",
+  "updated": "2026-06-02T11:59:38.578Z",
+  "published": true,
+  "publishedDate": "2026-06-02T14:38:53.480Z"
 }

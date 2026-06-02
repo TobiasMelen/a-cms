@@ -1,0 +1,17 @@
+{
+  "versionId": "282cfaf3-f9da-4594-805e-7a73d31805e2",
+  "contentId": "3ac2c007-c64f-48fb-a8fb-b209e6369d44",
+  "name": "Hello World",
+  "slug": "hello-world",
+  "sortKey": "r",
+  "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
+  "props": {
+    "title": "asasdasd",
+    "body": "This is our first blog post.",
+    "subtitle": "sdas"
+  },
+  "published": false,
+  "created": "2026-06-02T14:38:40.580Z",
+  "updated": "2026-06-02T14:38:40.580Z",
+  "publishedDate": null
+}

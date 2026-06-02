@@ -1,10 +1,16 @@
 {
-  "id": "fd3eb1e3-7899-4c07-9c6e-2c8855fc225b",
   "name": "About Us",
   "slug": "about",
   "parentId": "6b360723-5e42-4ab3-9cee-f9ba24365536",
   "props": {
-    "title": "About Us"
+    "title": "About Us",
+    "body": "asdasdasd"
   },
-  "sortKey": "n"
+  "sortKey": "i",
+  "versionId": "fd3eb1e3-7899-4c07-9c6e-2c8855fc225c",
+  "contentId": "fd3eb1e3-7899-4c07-9c6e-2c8855fc225b",
+  "created": "2026-05-26T09:10:35.727Z",
+  "updated": "2026-06-02T15:12:00.809Z",
+  "published": true,
+  "publishedDate": "2026-06-02T09:36:17.930Z"
 }

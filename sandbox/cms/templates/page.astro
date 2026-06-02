@@ -1,9 +1,11 @@
 ---
 import type { Page } from "a-cms";
+import { Field } from "a-cms/astro";
 import { z } from "zod";
 
 export const pageProps = z.object({
   title: z.string(),
+  subtitle: z.string(),
   body: z.string().optional(),
 });
 
@@ -12,8 +14,17 @@ const page = Astro.props.page as Page<z.infer<typeof pageProps>>;
 
 <html>
   <head><title>{page.props.title}</title></head>
-  <body>
-    <h2 style="color:red">{page.props.title}</h2>
-    <pre>{JSON.stringify(page, null, 2)}</pre>
+  <body
+    style="max-width: 600px; margin: 0 auto; padding: 2em; font-size: 1em; font-family: system-ui;"
+  >
+    <h1>
+      <Field content={page} field="title" />
+    </h1>
+    <h2>
+      <Field content={page} field="subtitle" />
+    </h2>
+    <p>
+      <Field content={page} field="body" />
+    </p>
   </body>
 </html>

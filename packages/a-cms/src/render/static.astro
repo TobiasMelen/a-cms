@@ -1,0 +1,21 @@
+---
+import { templates } from "virtual:a-cms/templates";
+import { buildUrlMap } from "../routing";
+import flatFileRepository from "../data/flat-file";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const pages = await flatFileRepository.getAll(process.cwd());
+  const urlMap = buildUrlMap(pages);
+  return Array.from(urlMap.entries()).map(([slug, page]) => ({
+    params: { slug: slug || undefined },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const Template = templates[page.templateId];
+---
+
+<Template {page} />
